@@ -35,9 +35,7 @@ class CursoController {
     Resources<Resource<Curso>> all() {
 
         List<Resource<Curso>> cursos = repository.findAll().stream()
-                .map(curso -> new Resource<>(curso,
-                        linkTo(methodOn(CursoController.class).one(curso.getId())).withSelfRel(),
-                        linkTo(methodOn(CursoController.class).all()).withRel("cursos")))
+                .map(assembler::toResource)
                 .collect(Collectors.toList());
 
         return new Resources<>(cursos,
