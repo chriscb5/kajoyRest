@@ -1,7 +1,9 @@
 package com.kajoyrest.test;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,9 +23,22 @@ class CursoController {
         this.repository = repository;
     }
 
-    @GetMapping("/cursos")
+    /*@GetMapping("/cursos")
     List<Curso> all() {
         return repository.findAll();
+    }*/
+
+    @GetMapping("/cursos")
+    Resources<Resource<Curso>> all() {
+
+        List<Resource<Curso>> cursos = repository.findAll().stream()
+                .map(curso -> new Resource<>(curso,
+                        linkTo(methodOn(CursoController.class).one(curso.getId())).withSelfRel(),
+                        linkTo(methodOn(CursoController.class).all()).withRel("cursos")))
+                .collect(Collectors.toList());
+
+        return new Resources<>(cursos,
+                linkTo(methodOn(CursoController.class).all()).withSelfRel());
     }
 
     @PostMapping("/cursos")
