@@ -12,8 +12,8 @@ class LoadDatabase {
     @Bean
     CommandLineRunner initDatabase(CursoRepository repository) {
         return args -> {
-            log.info("Precargando " + repository.save(new Curso("5to Secundaria", "5B")));
-            log.info("Precargando " + repository.save(new Curso("3ro Primaria", "3A")));
+            log.info("Precargando " + repository.save(new Curso("5to Secundaria", "5B","D")));
+            log.info("Precargando " + repository.save(new Curso("3ro Primaria", "3A", "A")));
         };
     }
 }
