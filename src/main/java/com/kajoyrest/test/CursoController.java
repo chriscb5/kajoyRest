@@ -19,8 +19,11 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 class CursoController {
     private final CursoRepository repository;
 
-    public CursoController(CursoRepository repository) {
+    private final  CursoResourceAssembler assembler;
+
+    public CursoController(CursoRepository repository, CursoResourceAssembler assembler) {
         this.repository = repository;
+        this.assembler = assembler;
     }
 
     /*@GetMapping("/cursos")
@@ -52,9 +55,11 @@ class CursoController {
         Curso curso = repository.findById(id)
                 .orElseThrow(() -> new CursoNotFoundException(id));
 
-        return new Resource<>(curso,
+        /*return new Resource<>(curso,
                 linkTo(methodOn(CursoController.class).one(id)).withSelfRel(),
-                linkTo(methodOn(CursoController.class).all()).withRel("cursos"));
+                linkTo(methodOn(CursoController.class).all()).withRel("cursos"));*/
+
+        return  assembler.toResource(curso);
     }
 
     @PutMapping("/employees/{id}")
@@ -76,4 +81,5 @@ class CursoController {
     void deleteEmployee(@PathVariable Long id) {
         repository.deleteById(id);
     }
+
 }
