@@ -39,8 +39,8 @@ class CursoController {
 
         return repository.findById(id)
                 .map(curso -> {
-                    curso.setName(newCurso.getGrado());
-                    curso.setRole(newCurso.getParalelo());
+                    curso.setGrado(newCurso.getGrado());
+                    curso.setParalelo(newCurso.getParalelo());
                     return repository.save(curso);
                 })
                 .orElseGet(() -> {
