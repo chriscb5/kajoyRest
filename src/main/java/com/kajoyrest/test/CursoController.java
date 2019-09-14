@@ -68,23 +68,30 @@ class CursoController {
         return  assembler.toResource(curso);
     }
 
-    @PutMapping("/employees/{id}")
-    Curso replaceEmployee(@RequestBody Curso newCurso, @PathVariable Long id) {
+    @PutMapping("/cursos/{id}")
+    ResponseEntity<?> replaceCurso(@RequestBody Curso newCurso, @PathVariable Long id) throws URISyntaxException {
 
-        return repository.findById(id)
+        Curso updatedCurso = repository.findById(id)
                 .map(curso -> {
                     curso.setGrado(newCurso.getGrado());
                     curso.setParalelo(newCurso.getParalelo());
+                    curso.setBloque(newCurso.getBloque());
                     return repository.save(curso);
                 })
                 .orElseGet(() -> {
                     newCurso.setId(id);
                     return repository.save(newCurso);
                 });
+
+        Resource<Curso> resource = assembler.toResource(updatedCurso);
+
+        return ResponseEntity
+                .created(new URI(resource.getId().expand().getHref()))
+                .body(resource);
     }
 
-    @DeleteMapping("/employees/{id}")
-    void deleteEmployee(@PathVariable Long id) {
+    @DeleteMapping("/cursos/{id}")
+    void deleteCurso(@PathVariable Long id) {
         repository.deleteById(id);
     }
 
