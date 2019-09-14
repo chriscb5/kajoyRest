@@ -46,7 +46,7 @@ class CursoController {
     }
 
     @PostMapping("/cursos")
-    ResponseEntity<?> newEmployee(@RequestBody Curso newCurso) throws URISyntaxException {
+    ResponseEntity<?> newCurso(@RequestBody Curso newCurso) throws URISyntaxException {
 
         Resource<Curso> resource = assembler.toResource(repository.save(newCurso));
 
@@ -91,8 +91,11 @@ class CursoController {
     }
 
     @DeleteMapping("/cursos/{id}")
-    void deleteCurso(@PathVariable Long id) {
+    ResponseEntity<?> deleteCurso(@PathVariable Long id) {
+
         repository.deleteById(id);
+
+        return ResponseEntity.noContent().build();
     }
 
 }
